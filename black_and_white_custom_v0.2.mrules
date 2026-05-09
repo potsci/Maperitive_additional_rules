@@ -1,3 +1,14 @@
+// Modification of the Rotbarsch black_and_white maperitive rules
+// 06.05.2026 by potsci
+//
+//	Goals:
+//	Create a style set that is easily readable on a 4 grey-level e-ink display
+//	The layout should be optimised for cycling
+//# 4 color values : #FFFFFF (100%) #a8a8a8(66%) #545454(33%) #000000 (black)
+
+
+
+
 // origin: https://wiki.openstreetmap.org/wiki/User:Rotbarsch/Maperitive_rules/black_and_white
 
 // Author: Rotbarsch
@@ -25,7 +36,7 @@
 
 
 features
-// parking : amenity=parking
+//	parking : amenity=parking
 //	postbox : amenity=post_box
 //	postoffice : amenity=post_office
 //	telephone : amenity=telephone
@@ -72,6 +83,7 @@ features
 		track : leisure=track
 		graveyard : amenity=grave_yard OR landuse=cemetery
 		military barracks : landuse=military AND military=barracks 
+		prohibited : military=danger_area
 		park : leisure=park
 		leisure garden : leisure=garden
 		landuse retail : landuse=retail
@@ -116,9 +128,12 @@ features
 		contours minor : contour[elevation_multiplier=10 and not elevation_multiplier=50]
 
 // Routes
-//		route ncn : relation[type=route AND route=bicycle AND network=ncn]
-//		route byway : relation[type=route AND route=bicycle AND network="National Byway"]
-//		route foot : relation[type=route AND route=foot]
+		route icn : relation[type=route AND route=bicycle AND network=icn]
+		route ncn : relation[type=route AND route=bicycle AND network=ncn]
+		route rcn : relation[type=route AND route=bicycle AND network=rcn]
+		route ldcn : relation[type=route AND route=bicycle AND network=lcn]
+		route byway : relation[type=route AND route=bicycle AND network="National Byway"]
+		route foot : relation[type=route AND route=foot]
 
 	points
 		place city : place=city
@@ -132,13 +147,13 @@ features
 //		convenience : shop=convenience
 //		bakery : shop=bakery
 //		restaurant : amenity=restaurant
-//		cafe : amenity=cafe
+//		cafe : amenity=cafess
 //		pharmacy : amenity=pharmacy
 
 properties
 	map-background-color	: #FFFFFF
 	map-background-opacity	: 1
-	map-sea-color : #B5B5B5
+	map-sea-color : #FFFFFF
 	font-weight : bold
 	font-family : Verdana Bold
 	text-halo-width : 25%
@@ -150,23 +165,23 @@ rules
 		define
 			line-width : 4
 			line-style : dash
-			line-color : #F7F7F7
+			line-color : #FFFFFF
 		draw : line
 
 	target : highway*
-		for : oneway=yes OR oneway=true
-			define 
-				min-zoom : 15
-				shape : custom
-				shape-def : 60,0;20,-40;20,-15;-60,-15;-60,15;20,15;20,40;60,0
-				shape-size : 12
-				shape-aspect : 0.5
-				shape-spacing : 6
-				fill-color : #6C6C6C
-			for : oneway=-1
-				define
-					angle : 180
-			draw : shape 
+//		for : oneway=yes OR oneway=true
+//			define 
+//				min-zoom :15
+//				shape : custom
+//				shape-def : 60,0;20,-40;20,-15;-60,-15;-60,15;20,15;20,40;60,0
+//				shape-size : 12
+//				shape-aspect : 0.5
+//				shape-spacing : 6
+//				fill-color : #6C6C6C
+//			for : oneway=-1
+//				define
+//					angle : 180
+//			draw : shape 
 
 		define
 			line-join : round
@@ -182,39 +197,60 @@ rules
 				define
 					line-width : 7:1;9:2;12:3;13:7;16:10;18:12
 			define
-				min-zoom : 18
-				line-color : #848484
+				min-zoom : 10
+				line-color : #FFFFFF
 				border-style : solid
-				border-color : #848484 black 20%
-				border-width : 15%				
+				border-color : #00000 black 20%
+				border-width : 50%				
 			draw : line
 			define
 				min-zoom : 7
-				max-zoom : 12
+				max-zoom : 10
 				border-style : none
 			draw : line
+			define
+				font-family : Tahoma
+				text-align-horizontal : center
+				text-align-vertical : center
+				text : ref
+				font-size : 12
+				text-color : #fcfcfb
+				text-halo-width : 0
+				shape : custom
+				shape-def : p:#809bc0;pw:5;f:#809bc0;m:-10,-10;l:10,-10;a:10,10,10,10;l:-10,10;a:10,10,-10,-10;z;p:#fcfcfb;pw:2;m:-10,-10;l:10,-10;a:10,10,10,10;l:-10,10;a:10,10,-10,-10;z
+				shield-padding-left : 5
+				shield-padding-right : 5
+				shield-padding-top : 7
+				shield-padding-bottom : 7
+				shield-resize-mode : free
+			draw : shield
 		elseif : *trunk*
 			define
-				min-zoom : 18
-				line-color : #969696
+				min-zoom : 10
+				line-color : #FFFFFF
 				line-width : 11:1;13:2;15:10;18:12
 				border-style : solid
-				border-color : #969696 black 20%
-				border-width : 15%
+				border-color : #545454 black 33%
+				border-width : 40%
 			draw : line
 			define
 				min-zoom : 7
-				max-zoom : 12
+				max-zoom : 10
 				border-style : none
 			draw : line
 		elseif : *primary*
+			define 
+				min-zoom: 14
+				font-size :14:12;18:14
+			draw : text
 			define
-				min-zoom : 18
-				line-color : #ECECEC
+				min-zoom : 10
+				line-color : #FFFFFF
 				line-width : 11:1;12:2;15:13;18:15
 				border-style : solid
-				border-color : #ECECEC black 20%
-				border-width : 15%
+				border-color : #000000 black 20%
+				border-width : 35%
+				// font-size:10:0;14:0
 			draw : line
 			define
 				min-zoom : 7
@@ -222,13 +258,17 @@ rules
 				border-style : none
 			draw : line
 		elseif : *secondary
+			define 
+				min-zoom: 13
+				font-size :13:12;18:14
+			draw : text
 			define
-				min-zoom : 18
-				line-color : #FDFDFD
+				min-zoom : 13
+				line-color : #FFFFFF
 				line-width : 11:1;13:2;15:12;18:14
 				border-style : solid
-				border-color : #CACACA
-				border-width : 15%
+				border-color : #000000
+				border-width : 30%
 			draw : line
 			define
 				min-zoom : 8.5
@@ -236,110 +276,135 @@ rules
 				border-style : none
 			draw : line
 		elseif : *tertiary
+			define 
+				min-zoom: 15
+				font-size :15:12;18:14
+			draw : text
 			define
-				min-zoom : 18
-				line-color : #FEFEFE
+				min-zoom : 12
+				line-color : #FFFFFF
 				line-width : 11:1;13:2;15:10;18:12
 				border-style : solid
-				border-color : #FEFEFE black 20%
-				border-width : 15%
+				border-color : #54545
+				border-width : 25%
 			draw : line
-			draw : text
-		elseif : *service
-			define
-				min-zoom : 18
-				line-color : white
-				line-width : 7:0.6;9:1;10:1.2;12:2.5;13:3;16:5;18:6
-				border-style : solid
-				border-color : #FEFEFE black 20%
-				border-width : 15%
-			draw : line
+
+		// elseif : *service
+		// 	//define
+		// 	//	min-zoom : 14
+		// 	//	line-color : #545454
+		// 	//	line-width : 7:0.6;9:1;10:1.2;12:2.5;13:3;16:5;18:6
+		// 	//	border-style : solid
+		// 	//	border-color : #a8a8a8 black 20%
+		// 	//	border-width : 15%
+		// 	//draw : line
 		elseif : *pedestrian
+			define 
+				min-zoom: 16
+				font-size :16:12;18:14
+			draw : text
 			define
-				min-zoom : 18
-				line-color : #EDEDED
-				line-width : 7:0.6;9:1;10:1.2;12:2.5;13:3;16:5;18:6
+				min-zoom : 14
+				line-color : #FFFFFF
+				line-width : 7:0.3;9:0.5;10:0.6;12:1.25;3:1.5;16:2.5;18:3
+				line-style : solid
 				border-style : solid
-				border-color : #B1B1B1 black 20%
-				border-width : 15%
+				border-color : #a8a8a8 black 20%
+				border-width : 10%
 			draw : line
 		elseif : *living street
+			define 
+				min-zoom : 16
+				font-size : 16:12;18:14
+			draw : text
 			define
-				min-zoom : 18
-				line-color : #EDEDED
+				min-zoom : 14
+				line-color : #FFFFFF
 				line-width : 7:0.6;9:1;10:1.2;12:2.5;13:3;16:5;18:6
 				border-style : solid
-				border-color : #B1B1B1 black 20%
-				border-width : 15%
+				border-color : #a8a8a8 black 20%
+				border-width : 10%
 			draw : line
-			draw : text
-
+//#545454(33%)
 		elseif : $regex("(.*residential)|(.*unclassified)")
 			define
-				min-zoom : 18
-				line-color : white
+				min-zoom : 16
+				max-zoom : 20
+				font-size : 16:10;18:12
+			draw : text
+			define
+				min-zoom : 14
+				line-color : #FFFFFF
 				line-width : 12:1;13:1.5;15:10;18:12
 				border-style : solid
 				border-color : white black 50%
 				border-width : 20%
 			draw : line
-			define
-				min-zoom : 10
-				max-zoom : 13
-				border-style : none
-				line-color : white black 25%
-			draw : line
-			define
-				min-zoom : 15
-				max-zoom : 20
-				font-size : 15:7;18:10
-			draw : text
 		elseif : *track
 			define
-				min-zoom : 12.5
-				line-color : #555555
+				min-zoom : 16
+				max-zoom : 20
+				font-size : 16:10;18:12
+			draw : text
+			define
+				min-zoom : 14
+				line-color : #000000
 				line-width : 1.5
 				line-style : dash
 				border-style : solid
 				border-color : white
-				border-width : 100%
+				border-width : 0%
 				border-opacity : 0.3
 			draw : line
 		elseif : *footway
+			define
+				min-zoom : 16
+				max-zoom : 20
+				font-size : 16:10;18:12
+			draw : text
 			define	
-				min-zoom : 13
-				line-color : #555555
+				min-zoom : 14
+				line-color : #000000
 				line-width : 1.5
 				line-style : dot
 				border-style : solid
 				border-color : white
-				border-width : 100%
+				border-width : 10%
+
+				border-opacity : 0
+			draw : line	
+		elseif : *cycleway
+			define
+				min-zoom : 16
+				max-zoom : 20
+				font-size : 16:10;18:12
+			draw : text
+			define	
+				min-zoom : 12
+				line-color : #000000
+				line-width : 1.5
+				line-style : solid
+				border-style : solid
+				border-color : white
+				border-width : 0%
 				border-opacity : 0.3
 //				curved : false
 			draw : line
-			draw : text		
-		elseif : *cycleway
-			define	
-				min-zoom : 12
-				line-color : #FFFFFF
-				line-width : 12:1;13:1.5;15:10;18:12
-				line-style : dash
-				border-style : solid
-				border-color : white
-				border-width : 10%
-				border-opacity : 1.0
-//				curved : false
-			draw : line
 		elseif : *path
+			define
+				min-zoom : 16
+				max-zoom : 20
+				font-size : 16:10;18:12
+			draw : text
 			define	
-				min-zoom : 13
+				min-zoom : 14
 				line-color : #6E6E6E
-				line-width : 5
-				line-style : dash
+				line-width : 1.5
+				line-style : dashdot
 				border-style : solid
 				border-color : white
-				border-width : 20%
-				border-opacity : 1.0
+				border-width : 100%
+				border-opacity : 0.3
 //				curved : false
 			draw : line
 		else
@@ -357,17 +422,17 @@ rules
 			line-style : none
 		draw : shape
 
-	target : playground
-		define
-			min-zoom : 12
-			fill-color : #EEEEEE
-			line-style : none
-		draw : fill
-		define
-			line-color : #ADADAD
-			line-width : 1
-		draw : line
-		draw : text
+	// target : playground
+	// 	define
+	// 		min-zoom : 12
+	// 		fill-color : #EEEEEE
+	// 		line-style : none
+	// 	draw : fill
+	// 	define
+	// 		line-color : #ADADAD
+	// 		line-width : 1
+	// 	draw : line
+	// 	draw : text
 
 	target : $featuretype(area)
 		define
@@ -376,7 +441,12 @@ rules
 		if : forest
 			define
 				min-zoom : 9
-				fill-color : #8D8D8D
+				line-style : none
+				fill-color : #FFFFFF 
+				//fill-hatch : diagonalcross
+				//fill-hatch-color: #a8a8a8 
+				fill-texture:Textures/Forests5.png
+				line-color:#000000
 		elseif : farm
 			define
 				min-zoom : 9
@@ -386,60 +456,79 @@ rules
 				fill-color : #C5C5C5 black 10%
 		elseif : water
 			define
-				fill-color : #B5B5B5
+				fill-color : #545454	
+				// fill-hatch : horizontal
+				// fill-hatch-color: #a8a8a8
+				fill-texture:Textures/Water4.png
+				line-style : solid
+				line-color : #545454
+				line-width : 2
 		elseif : residential area
 			define
-				fill-color : #DCDCDC
+				fill-color : #a8a8a8
+				
 		elseif : grass
 			define
-				fill-color : #CFCFCF
+				fill-color : #FFFFFF
+				fill-texture:Textures/Meadows2.png
 		elseif : allotments
 			define
-				fill-color : #666666
+				fill-color : #FFFFFF
 		elseif : meadow
 			define
-				fill-color : #CFCFCF
+				fill-color : #FFFFFF
+				fill-texture:Textures/Meadows2.png
 		elseif : nature reserve
 			define
-				fill-color : #ABABAB
+				line-style : solid
+				fill-color : #FFFFFF
+				fill-texture:Textures/Meadows2.png
 		elseif : car park
 			define
-				fill-color : #F6F6F6
+				fill-color : #a8a8a8
 		elseif : park
 			define
 				fill-color : #BBBBBB
+				fill-texture:Textures/Meadows2.png
 		elseif : leisure garden
 			define
 				fill-color : #CFCFCF
+				fill-texture:Textures/Meadows2.png
 		elseif : graveyard
 			define
-				fill-color : #A9A9A9
+				fill-color : #a8a8a8
 		elseif : building
 			define
-				fill-color : #BCBCBC
+				min-zoom:16
+				fill-color : #545454
 		elseif : pitch
 			define
-				fill-color : #BBBBBB
+				fill-color : #a8a8a8
 		elseif : track
 			define
 				fill-color : #747474
 		elseif : village green
 			define
-				fill-color : #CFCFCF
+				fill-color : #FFFFFF
 		elseif : landuse retail
 			define
-				fill-color : #F0F0F0
+				fill-color : #a8a8a8
 				line-color : #F4F4F4
 			draw : line
 		elseif : landuse industrial
 			define
-				fill-color : #DFDFDF
+				fill-color : #a8a8a8
 		elseif : commercial area
 			define
-				fill-color : #EFEFEF
+				fill-color : #a8a8a8
 		elseif : military barracks
 			define
-				fill-color : #FEFEFE
+				fill-color : #a8a8a8
+		elseif: prohibited
+			define
+				fill-color: #a8a8a8
+				fill-hatch : nwse
+				fill-hatch-color : #000000
 		else
 			stop
 		draw : fill
@@ -450,7 +539,7 @@ rules
 
 	target : academic
 		define
-			fill-color : #F0F0F0
+			fill-color : #a8a8a8
 			line-style : none
 		draw : fill
 		define
@@ -459,53 +548,53 @@ rules
 		draw : line
 //		draw : text
 
-	target : boundary*
-		define
-			line-color : #9E9E9E 
-			line-opacity : 0.5
-		if : boundary country
-			define
-				line-width : 6:1;9:3;10:6
-		elseif : boundary province
-			define
-				min-zoom : 4
-				line-width : 4:1;11:3
-				line-style : dash
-		elseif : boundary municipal
-			define
-				min-zoom : 12
-				line-width : 12:1;14:2
-				line-style : dash
-		draw : line
+	// target : boundary*
+	// 	define
+	// 		line-color : #000000 
+	// 		line-opacity : 1
+	// 	if : boundary country
+	// 		define
+	// 			line-width : 6:0.5;9:1;10:2
+	// 	elseif : boundary province
+	// 		define
+	// 			min-zoom : 4
+	// 			line-width : 4:1;11:3
+	// 			line-style : dash
+	// 	elseif : boundary municipal
+	// 		define
+	// 			min-zoom : 12
+	// 			line-width : 12:1;14:2
+	// 			line-style : dash
+	// 	draw : line
 
-	target : national park
-		define
-			fill-color : #8D8D8D
-			fill-opacity : 0.2
-			line-style : none
-		draw : fill
-		define
-			line-color : #8D8D8D black 20%
-			line-opacity : 0.5
-			line-width : 3
-			line-style : dash
-			font-size : 3:3;12:12
-			text-color : green
-		draw : line
-		draw : text
+	//target : national park
+	//	define
+	//		fill-color : #E5E5E5
+	//		fill-opacity : 0.2
+	//		line-style : none
+	//	draw : fill
+	//	define
+	//		line-color : #8D8D8D black 20%
+	//		line-opacity : 0.5
+	//		line-width : 3
+	//		line-style : dash
+	//		font-size : 3:3;12:12
+	//		text-color : green
+	//	draw : line
+	//	draw : text
 					
 	target : railway
 		define
-			min-zoom : 13
+			min-zoom : 11
 			line-color : #222222
-			line-width : 2
+			line-width : 4
 			curved : false
 		draw : line
 		define
-			min-zoom : 13
+			min-zoom : 11
 			line-style : dashlong
 			line-color : white
-			line-width : 2
+			line-width : 4
 			border-style : solid
 			border-color : #222222
 			border-width : 25%
@@ -513,12 +602,13 @@ rules
 		draw : line
 		define
 			min-zoom : 6
-			max-zoom : 13
+			max-zoom : 11
 			line-style : none
 			line-color : white black 30%
-			line-width : 6:1;8:1;12:1.5
+			line-width : 6:2;8:2;12:3
 			curved : true
 		draw : line
+
 
 	target : line barrier
 		define
@@ -547,33 +637,60 @@ rules
 		draw : line
 		draw : text
 
-		define
 
 
-//Routes
+// Routes
 	target : route*
 		define
-			line-width : 11:1.1;13:2.2;15:20;18:15
-			line-opacity : 0.75
+			// define
+			line-width : 7:1;9:2;12:3;13:7;16:10;18:12
+			line-opacity : 1
 			curved : true
+			border-width : 30%
+			border-style : solid
+			border-color : #a8a8a8
+			line-color : #000000 
+		if : *icn
+			define
+				// line-color : white
+				text : name
+				line-style : dash
+			draw : line
+			// draw : text			
 		if : *ncn
 			define
-				line-color : #000000
+				// line-color : white
 				text : name
+				line-style : dashdot
 			draw : line
-			draw : text					
-		elseif : *byway
+			// draw : text
+		if : *rcn
 			define
-				line-color : brown
-				line-style : dash
+				// line-color : white
 				text : name
+				line-style : dot
 			draw : line
-			draw : text
-		elseif : *foot
+			// draw : text
+		if : *lcn
 			define
-				line-color : purple
-				line-style : dash
+				line-width : 9:2.1;13:2.5;15:5;18:10
+				// line-color : white
+				text : name
+				line-style : dashdotdot
 			draw : line
+			// draw : text								
+		// elseif : *byway
+		// 	define
+		// 		line-color : brown
+		// 		line-style : dash
+		// 		text : name
+		// 	draw : line
+			// draw : text
+		// elseif : *foot
+		// 	define
+		// 		line-color : purple
+		// 		line-style : dash
+		// 	draw : line
 		else
 			stop
 
@@ -582,17 +699,17 @@ rules
 
 	target : river
 		define
-			line-color : #B5B5B5
+			line-color : #a8a8a8a8
 			line-width : 7:1;8:5
 		draw : line
 
 	target : stream
 		define
 			min-zoom : 13
-			line-color : #B5B5B5
+			line-color : #8a8a8a8
 			line-width : 13:1;15:2
 		draw : line
-		
+// icons		
 	target: parking
 		define
 			icon-image : https://github.com/openstreetmap/svn-archive/tree/main/applications/rendering/mapnik/symbolsparking.p.16.png
@@ -860,21 +977,22 @@ rules
 	
 			if : *city
 				define
-					font-size : 6:8;14:20
+					font-size : 6:20;14:25
 					min-zoom : 6
 					max-zoom : 14
 			elseif : *town
 				define
-					font-size : 9:8;12:10;20:20
+					font-size : 9:10;12:12;20:20
 					min-zoom : 9
 			elseif : *village
 				define
-					font-size : 12:10;20:20
+					font-size : 12:12;20:25
 					min-zoom : 12
+					max-zoom: 14
 			elseif : *hamlet
 				define
-					font-size : 14:8;20:16
-					min-zoom : 14
+					font-size : 13:4
+					max-zoom: 15
 			draw : text
 		else
 			define
